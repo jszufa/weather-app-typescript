@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Weather.css';
 import WeatherList from './WeatherList';
 import axios from 'axios';
@@ -19,27 +19,44 @@ export interface CityWeather {
 function Weather(): JSX.Element {
 
     const [weatherList, setWeatherList] = useState<CityWeather[]>([])
+    const [filteredWeatherList, setFilteredWeatherList] = useState<CityWeather[]>([])
+    const [inputData, setInputData] = useState<string>('')
 
-    const getWeatherData = () => {
+    useEffect(() => { getWeatherData(); }, []);
+    useEffect(() => { filterWeatherList(); }, [inputData]);
+
+    const getWeatherData = (): void => {
 
         axios.get('https://danepubliczne.imgw.pl/api/data/synop')
-            .then((response) => {
+            .then((response): void => {
                 console.log(response.data);
                 setWeatherList(response.data);
             })
-
+            
+            //Jak uruchomić weatherList na samym początku?
+            
     }
 
-    useEffect(() => { getWeatherData(); }, []);
+    const filterWeatherList = (): void => {
+        console.log(inputData);
 
+        let newFilteredWeatherList: CityWeather[] = weatherList.filter(miejsce => miejsce.stacja.toLowerCase().includes(inputData))
+
+        setFilteredWeatherList(newFilteredWeatherList);
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        
+        setInputData(e.target.value);
+    }
 
     return (
         <div className="Weather">
             <h1>Lista miast</h1>
-            <label>Szukaj
-                <input />
-            </label>
-            <WeatherList weatherList={weatherList}/>
+            <label>Szukaj</label>
+            <input type='text' name='search' onChange={(e) => handleInputChange(e)} />
+
+            <WeatherList weatherList={filteredWeatherList} />
         </div>
     );
 }
