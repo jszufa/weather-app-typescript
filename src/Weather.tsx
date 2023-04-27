@@ -31,16 +31,19 @@ function Weather(): JSX.Element {
             .then((response): void => {
                 console.log(response.data);
                 setWeatherList(response.data);
+
+                //Wyświetlenie pełnej listy na samym początku
+                setFilteredWeatherList(response.data);
             })
             
-            //Jak uruchomić weatherList na samym początku?
+            
             
     }
 
     const filterWeatherList = (): void => {
-        console.log(inputData);
 
-        let newFilteredWeatherList: CityWeather[] = weatherList.filter(miejsce => miejsce.stacja.toLowerCase().includes(inputData))
+        //filtrowanie case insensitive
+        let newFilteredWeatherList: CityWeather[] = weatherList.filter(miejsce => miejsce.stacja.toLowerCase().includes(inputData.toLowerCase()))
 
         setFilteredWeatherList(newFilteredWeatherList);
     }
@@ -53,7 +56,7 @@ function Weather(): JSX.Element {
     return (
         <div className="Weather">
             <h1>Lista miast</h1>
-            <label>Szukaj</label>
+            <label>Szukaj: </label>
             <input type='text' name='search' onChange={(e) => handleInputChange(e)} />
 
             <WeatherList weatherList={filteredWeatherList} />
