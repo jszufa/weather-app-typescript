@@ -32,12 +32,9 @@ function Weather(): JSX.Element {
                 console.log(response.data);
                 setWeatherList(response.data);
 
-                //Wyświetlenie pełnej listy na samym początku
+                //Wyświetlanie pełnej listy przy uruchomieniu aplikacji
                 setFilteredWeatherList(response.data);
             })
-            
-            
-            
     }
 
     const filterWeatherList = (): void => {
@@ -48,14 +45,15 @@ function Weather(): JSX.Element {
         setFilteredWeatherList(newFilteredWeatherList);
     }
 
+    //poniższy krok można pominąć i przekazywać wartość z inputa (e.target.value) bezpośrednio jako parametr funkcji filterWeatherList
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        
+
         setInputData(e.target.value);
     }
 
     return (
         <div className="Weather">
-            <h1>Lista miast</h1>
+            <h1>Lista stacji pomiarowych</h1>
             <label>Szukaj: </label>
             <input type='text' name='search' onChange={(e) => handleInputChange(e)} />
 
